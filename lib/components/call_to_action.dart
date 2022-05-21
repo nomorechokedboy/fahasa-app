@@ -25,14 +25,12 @@ class CallToAction extends StatelessWidget {
           Container(
             padding: const EdgeInsets.only(top: 20),
             child: withButton
-                ? OutlinedButton(
+                ? TextButton(
                     onPressed: () {},
                     child: callToActionText(buttonLabel!),
                     style: OutlinedButton.styleFrom(
-                      primary: Colors.red,
-                      side: const BorderSide(
-                        color: Colors.red,
-                      ),
+                      primary: Colors.white,
+                      backgroundColor: Colors.red,
                     ),
                   )
                 : null,
