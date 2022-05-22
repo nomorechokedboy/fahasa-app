@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'button.dart';
+
 class CallToAction extends StatelessWidget {
   final String message;
   final String? buttonLabel;
@@ -25,13 +27,9 @@ class CallToAction extends StatelessWidget {
           Container(
             padding: const EdgeInsets.only(top: 20),
             child: withButton
-                ? TextButton(
-                    onPressed: () {},
+                ? Button(
                     child: callToActionText(buttonLabel!),
-                    style: OutlinedButton.styleFrom(
-                      primary: Colors.white,
-                      backgroundColor: Colors.red,
-                    ),
+                    onPressed: () {},
                   )
                 : null,
           ),
