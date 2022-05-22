@@ -28,7 +28,7 @@ class Notifications extends StatelessWidget {
           )
         : const CallToAction(
             message: 'There are nothing to tell you.',
-            buttonLabel: 'Go shopping now');
+          );
   }
 
   Padding timeStatusText(String data) {
