@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './skeleton.dart';
 
 class NotificationCard extends StatelessWidget {
   final bool unread;
@@ -6,27 +7,71 @@ class NotificationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final notiImage = Container(
-      width: 48,
-      height: 48,
-      child: const Icon(
-        Icons.shopping_bag_rounded,
-        color: Colors.white,
-      ),
-      decoration: const BoxDecoration(
-        color: Colors.blue,
-        shape: BoxShape.circle,
-      ),
-    );
+    const loading = false;
 
     return Container(
-      color: unread ? Colors.blue.withAlpha(50) : Colors.white,
+      color: loading
+          ? Colors.transparent
+          : unread
+              ? Colors.blue.withAlpha(50)
+              : Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(10),
+        child: Skeleton(
+          visible: loading,
+          child: Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                child: const Icon(
+                  Icons.shopping_bag_rounded,
+                  color: Colors.white,
+                ),
+                decoration: const BoxDecoration(
+                  color: Colors.blue,
+                  shape: BoxShape.circle,
+                ),
+              ),
+              _buildText(context, loading: loading),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildText(BuildContext context, {bool loading = false}) {
+    if (loading) {
+      final decoration = BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.circular(16),
+      );
+
+      return Padding(
+        padding: const EdgeInsets.only(left: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 180,
+              height: 10,
+              decoration: decoration,
+            ),
+            const SizedBox(height: 16),
+            Container(
+              width: 50,
+              height: 10,
+              decoration: decoration,
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Expanded(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            notiImage,
             Flexible(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -65,7 +110,7 @@ class NotificationCard extends StatelessWidget {
             )
           ],
         ),
-      ),
-    );
+      );
+    }
   }
 }
