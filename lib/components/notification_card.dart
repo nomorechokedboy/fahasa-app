@@ -7,7 +7,7 @@ class NotificationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const loading = false;
+    const loading = true;
 
     return Container(
       color: loading
@@ -33,7 +33,9 @@ class NotificationCard extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
               ),
-              _buildText(context, loading: loading),
+              Expanded(
+                child: _buildText(context, loading: loading),
+              ),
             ],
           ),
         ),
@@ -54,13 +56,13 @@ class NotificationCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              width: 180,
-              height: 10,
+              width: double.infinity,
+              height: 15,
               decoration: decoration,
             ),
             const SizedBox(height: 16),
             Container(
-              width: 50,
+              width: 150,
               height: 10,
               decoration: decoration,
             ),
@@ -68,48 +70,46 @@ class NotificationCard extends StatelessWidget {
         ),
       );
     } else {
-      return Expanded(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Flexible(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: RichText(
-                  text: TextSpan(
-                    text: 'Order ',
-                    style: DefaultTextStyle.of(context).style,
-                    children: const [
-                      TextSpan(
-                        // TODO: replace with order name
-                        text: '#1234',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      TextSpan(text: ' is waiting to be process'),
-                    ],
-                  ),
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: RichText(
+                text: TextSpan(
+                  text: 'Order ',
+                  style: DefaultTextStyle.of(context).style,
+                  children: const [
+                    TextSpan(
+                      // TODO: replace with order name
+                      text: '#1234',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(text: ' is waiting to be process'),
+                  ],
                 ),
               ),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                const Text('9:20 AM'),
-                SizedBox(height: unread ? 8 : 16),
-                Container(
-                  child: unread
-                      ? const Icon(
-                          Icons.circle,
-                          color: Color(0xff0074ff),
-                          size: 10,
-                        )
-                      : null,
-                )
-              ],
-            )
-          ],
-        ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              const Text('9:20 AM'),
+              SizedBox(height: unread ? 8 : 16),
+              Container(
+                child: unread
+                    ? const Icon(
+                        Icons.circle,
+                        color: Color(0xff0074ff),
+                        size: 10,
+                      )
+                    : null,
+              )
+            ],
+          )
+        ],
       );
     }
   }
