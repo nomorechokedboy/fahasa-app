@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 
-class Button extends OutlinedButton {
+@immutable
+class FaButton extends OutlinedButton {
   final bool outlined;
+  final double width;
+  final double height;
   final bool secondary;
+  final String label;
 
-  const Button({
+  FaButton({
     Key? key,
     required VoidCallback? onPressed,
-    required Widget child,
     this.outlined = false,
+    this.width = 150,
+    this.height = 40,
     this.secondary = false,
-  }) : super(
-          key: key,
-          onPressed: onPressed,
-          child: child,
-        );
+    required this.label,
+  }) : super(key: key, onPressed: onPressed, child: Text(label));
 
   @override
   ButtonStyle defaultStyleOf(BuildContext context) {
@@ -42,7 +44,7 @@ class Button extends OutlinedButton {
         const EdgeInsets.symmetric(horizontal: 4),
         MediaQuery.maybeOf(context)?.textScaleFactor ?? 1,
       ),
-      minimumSize: const Size(64, 36),
+      minimumSize: Size(width, height),
       maximumSize: Size.infinite,
       side: BorderSide(
         color: _primaryColor,

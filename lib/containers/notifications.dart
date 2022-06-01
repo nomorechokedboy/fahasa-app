@@ -8,34 +8,57 @@ class Notifications extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const bool hasNotification = true;
+    const bool loading = false;
 
     return hasNotification
-        ? ListView(
-            children: [
-              const SizedBox(height: 10),
-              timeStatusText('Today'),
-              const NotificationCard(),
-              const NotificationCard(unread: false),
-              const NotificationCard(unread: false),
-              timeStatusText('Ealier'),
-              const NotificationCard(),
-              const NotificationCard(unread: false),
-              const NotificationCard(unread: false),
-              const NotificationCard(),
-              const NotificationCard(),
-              const NotificationCard(),
-            ],
-          )
+        ? loading
+            ? ListView(
+                children: const [
+                  SizedBox(height: 10),
+                  _TimeStatusText('Today'),
+                  NotificationCard(loading: true),
+                  NotificationCard(loading: true),
+                  NotificationCard(loading: true),
+                  NotificationCard(loading: true),
+                  _TimeStatusText('Ealier'),
+                  NotificationCard(loading: true),
+                  NotificationCard(loading: true),
+                  NotificationCard(loading: true),
+                ],
+              )
+            : ListView(
+                children: const [
+                  SizedBox(height: 10),
+                  _TimeStatusText('Today'),
+                  NotificationCard(),
+                  NotificationCard(unread: false),
+                  NotificationCard(unread: false),
+                  _TimeStatusText('Ealier'),
+                  NotificationCard(),
+                  NotificationCard(unread: false),
+                  NotificationCard(unread: false),
+                  NotificationCard(),
+                  NotificationCard(),
+                  NotificationCard(),
+                ],
+              )
         : const CallToAction(
             message: 'There are nothing to tell you.',
           );
   }
+}
 
-  Padding timeStatusText(String data) {
+class _TimeStatusText extends StatelessWidget {
+  const _TimeStatusText(this.message, {Key? key}) : super(key: key);
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Text(
-        data,
+        message,
         style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
