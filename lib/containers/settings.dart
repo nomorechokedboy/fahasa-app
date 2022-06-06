@@ -2,8 +2,11 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fahasa_app/components/button.dart';
+import 'package:fahasa_app/components/skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+
+const _loading = false;
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -17,53 +20,54 @@ class _SettingState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    const loading = true;
-
-    final _avatar = Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        selectedAvatar != null
-            ? CircleAvatar(
-                backgroundImage: FileImage(selectedAvatar!),
-                radius: 75,
-              )
-            : CachedNetworkImage(
-                fit: BoxFit.contain,
-                imageBuilder: (context, imageProvider) => Container(
-                  width: 150,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: imageProvider,
+    final _avatar = Skeleton(
+      visible: _loading,
+      child: Stack(
+        alignment: Alignment.bottomRight,
+        children: [
+          selectedAvatar != null
+              ? CircleAvatar(
+                  backgroundImage: FileImage(selectedAvatar!),
+                  radius: 75,
+                )
+              : CachedNetworkImage(
+                  fit: BoxFit.contain,
+                  imageBuilder: (context, imageProvider) => Container(
+                    width: 150,
+                    height: 150,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: imageProvider,
+                      ),
                     ),
                   ),
+                  imageUrl: 'https://pbs.twimg.com/media/FLLpy5dXsAI8nI9.jpg',
+                  placeholder: (context, url) =>
+                      const CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
-                imageUrl: 'https://pbs.twimg.com/media/FLLpy5dXsAI8nI9.jpg',
-                placeholder: (context, url) =>
-                    const CircularProgressIndicator(),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
+          Positioned(
+            right: -8,
+            child: TextButton(
+              style: TextButton.styleFrom(
+                elevation: 2,
+                primary: Colors.black,
+                backgroundColor: Colors.white.withOpacity(0.9),
+                padding: const EdgeInsets.all(12),
+                shape: const CircleBorder(),
               ),
-        Positioned(
-          right: -8,
-          child: TextButton(
-            style: TextButton.styleFrom(
-              elevation: 2,
-              primary: Colors.black,
-              backgroundColor: Colors.white.withOpacity(0.9),
-              padding: const EdgeInsets.all(12),
-              shape: const CircleBorder(),
+              onPressed: () {
+                selectAvatar();
+              },
+              child: const Icon(
+                Icons.camera_alt,
+                size: 20,
+              ),
             ),
-            onPressed: () {
-              selectAvatar();
-            },
-            child: const Icon(
-              Icons.camera_alt,
-              size: 20,
-            ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
 
     return Scaffold(
@@ -150,17 +154,19 @@ class _FormState extends State<_Form> {
                 selectGender(context);
               },
             ),
-            FaButton(
-              onPressed: () {},
-              width: MediaQuery.of(context).size.width,
-              label: 'Save change',
-            ),
-            FaButton(
-              onPressed: () {},
-              label: 'Delete account',
-              width: MediaQuery.of(context).size.width,
-              outlined: true,
-            )
+            if (!_loading) ...[
+              FaButton(
+                onPressed: () {},
+                width: MediaQuery.of(context).size.width,
+                label: 'Save change',
+              ),
+              FaButton(
+                onPressed: () {},
+                label: 'Delete account',
+                width: MediaQuery.of(context).size.width,
+                outlined: true,
+              )
+            ],
           ],
         ),
       ),
@@ -168,7 +174,7 @@ class _FormState extends State<_Form> {
   }
 
   void selectGender(BuildContext context) {
-    String? selectedGender = 'Male';
+    String? selectedGender = gender;
 
     showDialog(
       context: context,
@@ -250,49 +256,85 @@ class _TextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label ?? '',
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
+    final loadingTextField = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 100,
+          height: 16,
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(16),
           ),
-          const SizedBox(height: 8),
-          Stack(
-            alignment: Alignment.centerRight,
-            children: [
-              TextFormField(
-                enabled: false,
-                controller: TextEditingController(text: text),
-                keyboardType: keyboardStyle,
-                maxLines: maxLines,
-                decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.all(13),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(),
-                  ),
-                  disabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(),
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: onEditPressed,
-                child: const Text(
-                  'Change',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.red,
-                  ),
-                ),
-              ),
-            ],
+        ),
+        const SizedBox(height: 8),
+        Container(
+          width: double.infinity,
+          height: 38,
+          decoration: const BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.all(Radius.circular(4)),
           ),
-        ],
+        ),
+      ],
+    );
+
+    return Skeleton(
+      visible: _loading,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 16),
+        child: _loading
+            ? loadingTextField
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label ?? '',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      TextFormField(
+                        enabled: false,
+                        controller: TextEditingController(
+                          text: text,
+                        ),
+                        keyboardType: keyboardStyle,
+                        maxLines: maxLines,
+                        decoration: const InputDecoration(
+                          suffix: Text(
+                            'Change',
+                            style: TextStyle(
+                              color: Colors.transparent,
+                            ),
+                          ),
+                          contentPadding: EdgeInsets.all(13),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(),
+                          ),
+                          disabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(),
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: onEditPressed,
+                        child: const Text(
+                          'Change',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
       ),
     );
   }
