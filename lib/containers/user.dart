@@ -93,7 +93,7 @@ class _SettingTab extends StatelessWidget {
         ),
         onPressed: () {
           if (routeName != null) {
-            Navigator.of(context).pushNamed(routeName!);
+            Navigator.pushNamed(context, routeName!);
           }
         },
         child: Padding(

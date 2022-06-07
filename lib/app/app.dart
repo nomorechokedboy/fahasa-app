@@ -1,4 +1,5 @@
 import 'package:fahasa_app/constants/globals.dart';
+import 'package:fahasa_app/containers/cart_screen.dart';
 import 'package:fahasa_app/containers/order_detail.dart';
 import 'package:fahasa_app/containers/product_detail.dart';
 import 'package:flutter/material.dart';
@@ -67,6 +68,9 @@ class App extends StatelessWidget {
         switch (settings.name) {
           case toMainScreen:
             screen = const MainScreen();
+            break;
+          case toCartScreen:
+            screen = const CartScreen();
             break;
           case toProductDetail:
             screen = const ProductDetail();
