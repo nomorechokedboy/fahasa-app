@@ -62,7 +62,7 @@ class _CartScreenState extends State<CartScreen> {
           ? ListView(children: [
               ...productList
                   .map((item) => _CartItem(
-                        src: item.image,
+                        imageSrc: item.image,
                         name: item.name,
                         price: item.price,
                         author: item.authorName,
@@ -89,14 +89,14 @@ class _CartScreenState extends State<CartScreen> {
 class _CartItem extends StatelessWidget {
   const _CartItem({
     Key? key,
-    required this.src,
+    required this.imageSrc,
     required this.name,
     required this.price,
     required this.author,
     this.onRemove,
   }) : super(key: key);
 
-  final String src;
+  final String imageSrc;
   final String name;
   final String author;
   final double price;
@@ -136,7 +136,7 @@ class _CartItem extends StatelessWidget {
             Checkbox(value: false, onChanged: (value) {}),
             Padding(
               padding: const EdgeInsets.only(right: 13),
-              child: ProductImage(src: src, width: 60),
+              child: ProductImage(src: imageSrc, width: 60),
             ),
             SizedBox(
               height: 80,
