@@ -5,6 +5,6 @@ class ProductDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Text("Implement for Product Detail here"));
+    return const Scaffold(body: Text('Implement for Product Detail here'));
   }
 }
