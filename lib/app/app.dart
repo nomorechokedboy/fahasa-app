@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 
 import '../containers/main_screen.dart';
 import '../containers/settings.dart';
+import '../containers/login_screen.dart';
+import '../containers/register_screen.dart';
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
@@ -54,7 +56,7 @@ class App extends StatelessWidget {
           caption: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
         ),
       ),
-      home: const MainScreen(),
+      home: const LoginScreen(),
       onGenerateRoute: routes(),
     );
   }
@@ -65,6 +67,12 @@ class App extends StatelessWidget {
 
         Widget screen;
         switch (settings.name) {
+          case toLogin:
+            screen = const LoginScreen();
+            break;
+          case toRegister:
+            screen = const RegisterScreen();
+            break;
           case toMainScreen:
             screen = const MainScreen();
             break;

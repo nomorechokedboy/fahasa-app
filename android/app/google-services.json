@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "904203359576",
+    "firebase_url": "https://fahasa-replica-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "fahasa-replica",
+    "storage_bucket": "fahasa-replica.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:904203359576:android:9724d71bb53baaade0c12d",
+        "android_client_info": {
+          "package_name": "com.example.fahasa_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "904203359576-qs2ku6nrka4846ns8gudm1idadidtu6p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBCY1LllQJYEUJR3VLyJ4Gm1L_fszw8Zc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "904203359576-qs2ku6nrka4846ns8gudm1idadidtu6p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
