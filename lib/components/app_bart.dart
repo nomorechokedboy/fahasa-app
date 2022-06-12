@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-AppBar secondaryAppBar(String title) => AppBar(
+AppBar secondaryAppBar([String? title]) => AppBar(
       actions: [
         Container(
             child: const Icon(
@@ -10,7 +10,7 @@ AppBar secondaryAppBar(String title) => AppBar(
             ),
             margin: const EdgeInsets.only(right: 20))
       ],
-      title: Text(title),
+      title: title != null ? Text(title) : null,
     );
 
 AppBar primaryAppBar() => AppBar(

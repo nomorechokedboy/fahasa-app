@@ -1,3 +1,4 @@
+import 'package:fahasa_app/constants/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -17,9 +18,9 @@ class MainScreen extends StatefulWidget {
 
 final appBars = [
   primaryAppBar(),
-  secondaryAppBar('Notifications'),
-  secondaryAppBar('Orders'),
-  secondaryAppBar('User')
+  secondaryAppBar(notificationTitle),
+  secondaryAppBar(orderTitle),
+  secondaryAppBar(),
 ];
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {

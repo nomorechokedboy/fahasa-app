@@ -6,26 +6,57 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:fahasa_app/app/app.dart';
+import 'package:fahasa_app/constants/globals.dart';
+import 'package:fahasa_app/containers/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:fahasa_app/main.dart';
-
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Go to notifications tab', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const App());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    final searchIcon = find.byIcon(Icons.search);
+    final notificationIcon = find.byIcon(Icons.notifications_rounded);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    expect(searchIcon, findsOneWidget);
+    expect(notificationIcon, findsOneWidget);
+
+    await tester.tap(notificationIcon);
     await tester.pump();
 
     // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.text(notificationTitle), findsOneWidget);
+    expect(find.byIcon(Icons.search), findsNothing);
+  });
+
+  testWidgets('Go to orders tab', (WidgetTester tester) async {
+    // Build our app and trigger a frame.
+    await tester.pumpWidget(const App());
+
+    expect(find.byIcon(Icons.search), findsOneWidget);
+    expect(find.byIcon(Icons.subject_rounded), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.subject_rounded));
+    await tester.pump();
+
+    // Verify that our counter has incremented.
+    expect(find.text(orderTitle), findsOneWidget);
+    expect(find.byIcon(Icons.search), findsNothing);
+  });
+
+  testWidgets('Go to settings tab', (WidgetTester tester) async {
+    // Build our app and trigger a frame.
+    await tester.pumpWidget(const App());
+
+    expect(find.byIcon(Icons.search), findsOneWidget);
+    expect(find.byIcon(Icons.account_circle_rounded), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.account_circle_rounded));
+    await tester.pump();
+
+    // Verify that our counter has incremented.
+    expect(find.byType(Settings), findsOneWidget);
+    expect(find.byIcon(Icons.search), findsNothing);
   });
 }
