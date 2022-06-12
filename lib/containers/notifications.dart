@@ -43,7 +43,7 @@ class Notifications extends StatelessWidget {
                 ],
               )
         : const CallToAction(
-            message: 'There are nothing to tell you.',
+            message: 'There are nothing to tell you!',
           );
   }
 }

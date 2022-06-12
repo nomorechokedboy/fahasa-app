@@ -3,14 +3,21 @@ import 'package:flutter/material.dart';
 
 class ProductImage extends StatelessWidget {
   final String src;
-  const ProductImage({Key? key, required this.src}) : super(key: key);
+  final double width;
+  final double height;
+  const ProductImage({
+    Key? key,
+    required this.src,
+    this.width = 100,
+    this.height = 150,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
         imageUrl: src,
-        width: 100,
-        height: 150,
+        width: width,
+        height: height,
         fit: BoxFit.contain,
         placeholder: (context, url) => const SizedBox.expand(
               child: FittedBox(child: Icon(Icons.image_outlined)),
