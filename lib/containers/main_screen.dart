@@ -4,9 +4,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../components/app_bart.dart';
 import 'home.dart';
+import 'user.dart';
 import 'notifications.dart';
 import 'orders.dart';
-import 'settings.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -19,7 +19,7 @@ final appBars = [
   primaryAppBar(),
   secondaryAppBar('Notifications'),
   secondaryAppBar('Orders'),
-  secondaryAppBar('Settings'),
+  secondaryAppBar('User')
 ];
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
@@ -37,7 +37,12 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     return Scaffold(
       appBar: appBars[select],
       body: PageView(
-        children: const <Widget>[Home(), Notifications(), Orders(), Settings()],
+        children: const <Widget>[
+          Home(),
+          Notifications(),
+          Orders(),
+          User(),
+        ],
         controller: pageController,
         onPageChanged: (page) {
           setState(() {

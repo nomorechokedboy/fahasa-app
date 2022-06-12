@@ -22,14 +22,15 @@ class CallToAction extends StatelessWidget {
             width: 150,
             height: 150,
           ),
-          callToActionText('Oops!'),
-          callToActionText(message),
+          const _CTAText('Oops!'),
+          _CTAText(message),
           Container(
             padding: const EdgeInsets.only(top: 20),
             child: withButton
-                ? Button(
-                    child: callToActionText(buttonLabel!),
+                ? FaButton(
                     onPressed: () {},
+                    secondary: true,
+                    label: buttonLabel!,
                   )
                 : null,
           ),
@@ -37,10 +38,17 @@ class CallToAction extends StatelessWidget {
       ),
     );
   }
+}
 
-  Text callToActionText(String data) {
+class _CTAText extends StatelessWidget {
+  final String message;
+
+  const _CTAText(this.message, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Text(
-      data,
+      message,
       style: const TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.bold,

@@ -4,6 +4,7 @@ import 'package:fahasa_app/containers/product_detail.dart';
 import 'package:flutter/material.dart';
 
 import '../containers/main_screen.dart';
+import '../containers/settings.dart';
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
@@ -33,7 +34,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primaryColor: createMaterialColor(const Color(0xffd22121)),
+        primarySwatch: createMaterialColor(const Color(0xffd22121)),
         secondaryHeaderColor: createMaterialColor(const Color(0xff0074FF)),
         focusColor: createMaterialColor(const Color(0xff8841E9)),
         highlightColor:
@@ -59,18 +60,22 @@ class App extends StatelessWidget {
   }
 
   RouteFactory routes() => (settings) {
-        Map<String, dynamic> args = {};
-        args = settings.arguments as Map<String, dynamic>;
+        /* Map<String, dynamic> args = {}; */
+        /* args = settings.arguments as Map<String, dynamic>; */
+
         Widget screen;
         switch (settings.name) {
           case toMainScreen:
             screen = const MainScreen();
             break;
           case toProductDetail:
-            screen = ProductDetail();
+            screen = const ProductDetail();
             break;
           case toOrderDetail:
-            screen = OrderDetail();
+            screen = const OrderDetail();
+            break;
+          case toUserSetting:
+            screen = const Settings();
             break;
           default:
             return null;
