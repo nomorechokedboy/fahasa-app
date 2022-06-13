@@ -6,12 +6,13 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'app/app.dart';
 
 void main() async {
-  await dotenv.load(fileName: '.env');
+  await dotenv.load();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   runApp(const App());
 }

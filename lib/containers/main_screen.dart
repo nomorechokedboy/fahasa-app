@@ -1,6 +1,5 @@
 import 'package:fahasa_app/constants/globals.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../components/app_bart.dart';
@@ -23,14 +22,13 @@ final appBars = [
   secondaryAppBar(),
 ];
 
-class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
+class _MainScreenState extends State<MainScreen> {
   int select = 0;
   PageController pageController = PageController();
 
   @override
   void initState() {
     super.initState();
-    FlutterNativeSplash.remove();
   }
 
   @override

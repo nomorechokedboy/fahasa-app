@@ -1,5 +1,6 @@
 import 'package:fahasa_app/constants/globals.dart';
 import 'package:fahasa_app/containers/order_detail.dart';
+import 'package:fahasa_app/containers/otp_screen.dart';
 import 'package:fahasa_app/containers/product_detail.dart';
 import 'package:flutter/material.dart';
 
@@ -62,9 +63,6 @@ class App extends StatelessWidget {
   }
 
   RouteFactory routes() => (settings) {
-        /* Map<String, dynamic> args = {}; */
-        /* args = settings.arguments as Map<String, dynamic>; */
-
         Widget screen;
         switch (settings.name) {
           case toLogin:

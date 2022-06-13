@@ -6,6 +6,7 @@ const String toOrderDetail = '/order_detail';
 const String toUserSetting = '/user_setting';
 const String toLogin = '/login';
 const String toRegister = '/register';
+const String toOtp = '/otp';
 const String notificationTitle = 'Notification';
 const String orderTitle = 'Order';
 const String cartTitle = 'Cart';
