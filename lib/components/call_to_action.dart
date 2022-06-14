@@ -4,15 +4,16 @@ import 'button.dart';
 
 class CallToAction extends StatelessWidget {
   final String message;
-  final String? buttonLabel;
+  final CTAButton? button;
 
-  const CallToAction({Key? key, required this.message, this.buttonLabel})
-      : super(key: key);
+  const CallToAction({
+    Key? key,
+    required this.message,
+    this.button,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    bool withButton = buttonLabel != null && buttonLabel!.isNotEmpty;
-
     return Padding(
       padding: const EdgeInsets.only(top: 50),
       child: Column(
@@ -26,18 +27,26 @@ class CallToAction extends StatelessWidget {
           _CTAText(message),
           Container(
             padding: const EdgeInsets.only(top: 20),
-            child: withButton
-                ? FaButton(
-                    onPressed: () {},
-                    secondary: true,
-                    label: buttonLabel!,
-                  )
-                : null,
+            child: button,
           ),
         ],
       ),
     );
   }
+}
+
+class CTAButton extends FaButton {
+  /// CTAButton is FaButton but with secondary background color.
+  CTAButton({
+    Key? key,
+    required String label,
+    required VoidCallback? onPressed,
+  }) : super(
+          key: key,
+          label: label,
+          secondary: true,
+          onPressed: onPressed,
+        );
 }
 
 class _CTAText extends StatelessWidget {
@@ -47,11 +56,13 @@ class _CTAText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      message,
-      style: const TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.bold,
+    return Center(
+      child: Text(
+        message,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

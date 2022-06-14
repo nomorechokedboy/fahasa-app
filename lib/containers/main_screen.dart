@@ -1,8 +1,8 @@
+import 'package:fahasa_app/constants/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../components/app_bart.dart';
 import 'home.dart';
 import 'user.dart';
 import 'notifications.dart';
@@ -15,16 +15,16 @@ class MainScreen extends StatefulWidget {
   _MainScreenState createState() => _MainScreenState();
 }
 
-final appBars = [
-  primaryAppBar(),
-  secondaryAppBar('Notifications'),
-  secondaryAppBar('Orders'),
-  secondaryAppBar('User')
-];
-
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
-  int select = 0;
-  PageController pageController = PageController();
+  final _appBars = const <PreferredSizeWidget>[
+    _PrimaryAppBar(),
+    _SecondaryAppBar(title: 'Notifications'),
+    _SecondaryAppBar(title: 'Orders'),
+    _SecondaryAppBar(title: 'User')
+  ];
+
+  final PageController _pageController = PageController();
+  int _select = 0;
 
   @override
   void initState() {
@@ -35,18 +35,18 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBars[select],
+      appBar: _appBars[_select],
       body: PageView(
-        children: const <Widget>[
+        children: const [
           Home(),
           Notifications(),
           Orders(),
           User(),
         ],
-        controller: pageController,
+        controller: _pageController,
         onPageChanged: (page) {
           setState(() {
-            select = page;
+            _select = page;
           });
         },
       ),
@@ -55,56 +55,54 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
           children: [
             IconButton(
                 onPressed: () {
-                  pageController.jumpToPage(0);
+                  _pageController.jumpToPage(0);
                   setState(() {
-                    select = 0;
+                    _select = 0;
                   });
                 },
                 icon: Icon(
                   Icons.home,
-                  color: select == 0
+                  color: _select == 0
                       ? Theme.of(context).primaryColor
                       : Colors.black,
                 )),
             IconButton(
                 onPressed: () {
-                  pageController.jumpToPage(1);
+                  _pageController.jumpToPage(1);
                   setState(() {
-                    select = 1;
+                    _select = 1;
                   });
                 },
                 icon: Icon(
                   Icons.notifications_rounded,
-                  color: select == 1
+                  color: _select == 1
                       ? Theme.of(context).primaryColor
                       : Colors.black,
                 )),
-            const SizedBox(
-              width: 50,
-            ),
+            const SizedBox(width: 50),
             IconButton(
                 onPressed: () {
-                  pageController.jumpToPage(2);
+                  _pageController.jumpToPage(2);
                   setState(() {
-                    select = 2;
+                    _select = 2;
                   });
                 },
                 icon: Icon(
                   Icons.subject_rounded,
-                  color: select == 2
+                  color: _select == 2
                       ? Theme.of(context).primaryColor
                       : Colors.black,
                 )),
             IconButton(
                 onPressed: () {
-                  pageController.jumpToPage(3);
+                  _pageController.jumpToPage(3);
                   setState(() {
-                    select = 3;
+                    _select = 3;
                   });
                 },
                 icon: Icon(
                   Icons.account_circle_rounded,
-                  color: select == 3
+                  color: _select == 3
                       ? Theme.of(context).primaryColor
                       : Colors.black,
                 )),
@@ -122,4 +120,65 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
+}
+
+class _SecondaryAppBar extends StatelessWidget with PreferredSizeWidget {
+  const _SecondaryAppBar({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      actions: [
+        Container(
+            child: IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, toCartScreen);
+                },
+                icon: const Icon(
+                  Icons.shopping_cart_outlined,
+                  size: 25,
+                  semanticLabel: 'To shopping cart',
+                )),
+            margin: const EdgeInsets.only(right: 20))
+      ],
+      title: Text(title),
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class _PrimaryAppBar extends StatelessWidget with PreferredSizeWidget {
+  const _PrimaryAppBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      actions: [
+        Container(
+            child: IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, toCartScreen);
+              },
+              icon: const Icon(
+                Icons.shopping_cart_outlined,
+                size: 25,
+                semanticLabel: 'To shopping cart',
+              ),
+            ),
+            margin: const EdgeInsets.only(right: 20))
+      ],
+      leading: const Icon(
+        Icons.search,
+        size: 25,
+        semanticLabel: 'Search action',
+      ),
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
