@@ -1,5 +1,6 @@
 import 'package:fahasa_app/components/button.dart';
 import 'package:fahasa_app/constants/globals.dart';
+import 'package:fahasa_app/containers/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,49 @@ class OTPScreen extends StatefulWidget {
 }
 
 class _OTPScreenState extends State<OTPScreen> {
-  final List<String> _otpValues = List<String>.generate(4, (int _index) => '');
+  final List<String> _otpValues = List<String>.generate(6, (int _index) => '');
+
+  void _handleLoginSuccess(PhoneAuthCredential credential) async {
+    print('In handle login success`');
+    await FirebaseAuth.instance.signInWithCredential(credential);
+    Navigator.pushNamed(context, toMainScreen);
+  }
+
+  void _handleLoginFail(FirebaseAuthException e) {
+    if (e.code == 'invalid-phone-number') {
+      _showToast(
+          context, 'Auth Failed!', 'The provided phone number is not valid.');
+    }
+
+    _showToast(context, "Login Error", e.code);
+  }
+
+  void _handleCodeSent(String verificationId, int? resendToken) {
+    // Update the UI - wait for the user to enter the SMS code
+    String smsCode = _otpValues.join('');
+
+    // // Create a PhoneAuthCredential with the code
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: verificationId, smsCode: smsCode);
+
+    // // Sign the user in (or link) with the credential
+    _handleLoginSuccess(credential);
+  }
+
+  void _showToast(BuildContext context, String label, String message) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: Text(message),
+        action: SnackBarAction(
+            label: label, onPressed: scaffold.hideCurrentSnackBar),
+      ),
+    );
+  }
+
+  void _handleAutoRetrieve(String verificationId) {
+    // Auto-resolution timed out...
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +110,12 @@ class _OTPScreenState extends State<OTPScreen> {
                 _OTPTextField(
                   onChanged: (value) => _otpValues[3] = value,
                 ),
+                _OTPTextField(
+                  onChanged: (value) => _otpValues[4] = value,
+                ),
+                _OTPTextField(
+                  onChanged: (value) => _otpValues[5] = value,
+                ),
               ],
             ),
             Container(
@@ -85,15 +134,23 @@ class _OTPScreenState extends State<OTPScreen> {
                       style: const TextStyle(
                           color: Colors.blue, fontWeight: FontWeight.bold),
                       recognizer: TapGestureRecognizer()
-                        ..onTap =
-                            () => Navigator.pushNamed(context, toRegister),
+                        ..onTap = () async {
+                          await FirebaseAuth.instance.verifyPhoneNumber(
+                              phoneNumber: widget.phoneNumber,
+                              verificationCompleted: _handleLoginSuccess,
+                              verificationFailed: _handleLoginFail,
+                              codeSent: _handleCodeSent,
+                              codeAutoRetrievalTimeout: _handleAutoRetrieve,
+                              timeout: const Duration(seconds: 60));
+                        },
                     )
                   ],
                 ),
               ),
             ),
             const SizedBox(height: 30),
-            FaButton(
+            Flexible(
+                child: FaButton(
               onPressed: () async {
                 final smsCode = _otpValues.join();
 
@@ -102,10 +159,18 @@ class _OTPScreenState extends State<OTPScreen> {
                     verificationId: widget.verificationId, smsCode: smsCode);
 
                 await auth.signInWithCredential(credential);
+                Navigator.pushAndRemoveUntil<dynamic>(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) => const MainScreen(),
+                  ),
+                  (route) =>
+                      false, //if you want to disable back feature set to false
+                );
               },
               label: 'Verify',
               width: 220,
-            )
+            ))
           ],
         ),
       ),

@@ -1,8 +1,11 @@
 import 'package:fahasa_app/constants/globals.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+
+import 'otp_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -19,6 +22,57 @@ class _LoginScreenState extends State<LoginScreen>
   void initState() {
     super.initState();
     FlutterNativeSplash.remove();
+  }
+
+  void _handleLoginSuccess(PhoneAuthCredential credential) async {
+    print('In handle login success`');
+    await FirebaseAuth.instance.signInWithCredential(credential);
+    Navigator.pushNamed(context, toMainScreen);
+  }
+
+  void _handleLoginFail(FirebaseAuthException e) {
+    if (e.code == 'invalid-phone-number') {
+      _showToast(
+          context, 'Auth Failed!', 'The provided phone number is not valid.');
+    }
+
+    _showToast(context, 'Login Error', e.code);
+  }
+
+  void _handleCodeSent(String verificationId, int? resendToken) {
+    // Update the UI - wait for the user to enter the SMS code
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => OTPScreen(
+          verificationId: verificationId,
+          phoneNumber: '+84${_phoneNumber.substring(1)}',
+        ),
+      ),
+    );
+    // String smsCode = '051001';
+
+    // // Create a PhoneAuthCredential with the code
+    // PhoneAuthCredential credential = PhoneAuthProvider.credential(
+    //     verificationId: verificationId, smsCode: smsCode);
+
+    // // Sign the user in (or link) with the credential
+    // _handleLoginSuccess(credential);
+  }
+
+  void _handleAutoRetrieve(String verificationId) {
+    // Auto-resolution timed out...
+  }
+
+  void _showToast(BuildContext context, String label, String message) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: Text(message),
+        action: SnackBarAction(
+            label: label, onPressed: scaffold.hideCurrentSnackBar),
+      ),
+    );
   }
 
   @override
@@ -86,8 +140,15 @@ class _LoginScreenState extends State<LoginScreen>
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     MaterialButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, toMainScreen);
+                      onPressed: () async {
+                        await FirebaseAuth.instance.verifyPhoneNumber(
+                            phoneNumber: '+84' + _phoneNumber.substring(1),
+                            verificationCompleted: _handleLoginSuccess,
+                            verificationFailed: _handleLoginFail,
+                            codeSent: _handleCodeSent,
+                            codeAutoRetrievalTimeout: _handleAutoRetrieve,
+                            timeout: const Duration(seconds: 60));
+                        // Navigator.pushNamed(context, toMainScreen);
                       },
                       color: Theme.of(context).colorScheme.primary,
                       textColor: Colors.white,
@@ -121,12 +182,15 @@ class _LoginScreenState extends State<LoginScreen>
                   ],
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(top: 60),
-                child: const Text(
-                  'Use the application accoring to policy rules.\nAny kinds of violations will be subject to sanctions.',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-                  textAlign: TextAlign.center,
+              const Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(top: 60),
+                  child: Text(
+                    'Use the application accoring to policy rules.\nAny kinds of violations will be subject to sanctions.',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.fade,
+                  ),
                 ),
               )
             ],
